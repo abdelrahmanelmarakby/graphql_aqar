@@ -1,0 +1,25 @@
+query get_all_properties(){
+  findManyProperties(options: {limit: 10, page:1}) {
+    entities {
+      approved
+      area
+      available
+      bathrooms
+      bedrooms
+      createdBy {
+        email
+        name
+        phone
+        id
+      }
+      id
+      imageUrl
+      locImageUrl
+      payMethod
+      price
+      propType
+      propertyName
+      purpose
+    }
+  }
+}

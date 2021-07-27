@@ -1,0 +1,192 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+input ChangeUserPasswordInput {
+  confirmNewPassword: String!
+  oldPassword: String!
+  newPassword: String!
+}
+
+input CreatePropertyInput {
+  createdBy: Int!
+  imageUrl: Image
+  locImageUrl: Image
+  propertyName: String!
+  purpose: String!
+  propType: String!
+  payMethod: String!
+  available: Boolean!
+  approved: Boolean!
+  price: Float!
+  area: Float!
+  bedrooms: Float!
+  bathrooms: Float!
+}
+
+input FilterPropertyArg {
+  createdBy: Int
+  imageUrl: Image
+  locImageUrl: Image
+  propertyName: String
+  purpose: String
+  propType: String
+  payMethod: String
+  available: Boolean
+  approved: Boolean
+  price: Float
+  area: Float
+  bedrooms: Float
+  bathrooms: Float
+  id: Int
+}
+
+input FilterUserArg {
+  addresses: [Int!]
+  email: String
+  phone: String
+  name: String
+  company: String
+  id: Int
+}
+
+type FindManyPropertysEntity {
+  entities: [PropertyEntity!]!
+  info: InfoEntity
+}
+
+type FindManyUsersEntity {
+  entities: [UserEntity!]!
+  info: InfoEntity
+}
+
+input ForgetUserPasswordInput {
+  email: String!
+}
+
+"""Image upload type."""
+scalar Image
+
+type InfoEntity {
+  nextPage: Float
+  previousPage: Float
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  totalEntities: Float!
+  limit: Float!
+  totalPages: Float!
+  currentPage: Float!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  userRegister(data: RegisterUserInput!): UserWithTokenEntity!
+  userLogin(data: LoginUserInput!): UserWithTokenEntity!
+  userForgetPassword(data: ForgetUserPasswordInput!): Boolean!
+  userResetPassword(data: ResetUserPasswordInput!): UserWithTokenEntity!
+  userChangePassword(data: ChangeUserPasswordInput!): UserWithTokenEntity!
+  updateUser(data: UpdateUserInput!): UserEntity
+  createProperty(data: CreatePropertyInput!): PropertyEntity!
+  updateProperty(data: UpdatePropertyInput!): PropertyEntity
+  removeProperty(id: Int!): PropertyEntity
+}
+
+input OptionsArgs {
+  limit: Int = 10
+  page: Int = 1
+}
+
+type PropertyEntity {
+  createdBy: UserEntity!
+  imageUrl: Image
+  locImageUrl: Image
+  id: Float
+  propertyName: String!
+  purpose: String!
+  propType: String!
+  payMethod: String!
+  available: Boolean!
+  approved: Boolean!
+  price: Float!
+  area: Float!
+  bedrooms: Float!
+  bathrooms: Float!
+}
+
+type Query {
+  me: UserEntity!
+  findManyUsers(options: OptionsArgs, query: FilterUserArg): FindManyUsersEntity!
+  findOneUser(query: FilterUserArg): UserEntity
+  findManyProperties(options: OptionsArgs, query: FilterPropertyArg): FindManyPropertysEntity!
+  findOneProperty(query: FilterPropertyArg): PropertyEntity
+}
+
+input RegisterUserInput {
+  confirmPassword: String!
+  addresses: [Int!]
+  email: String!
+  password: String!
+  phone: String!
+  name: String
+  company: String
+}
+
+input ResetUserPasswordInput {
+  confirmNewPassword: String!
+  newPassword: String!
+}
+
+enum Role {
+  user
+  property
+  insurance
+  admin
+  operator
+}
+
+input UpdatePropertyInput {
+  createdBy: Int
+  imageUrl: Image
+  locImageUrl: Image
+  propertyName: String
+  purpose: String
+  propType: String
+  payMethod: String
+  available: Boolean
+  approved: Boolean
+  price: Float
+  area: Float
+  bedrooms: Float
+  bathrooms: Float
+  id: Int!
+}
+
+input UpdateUserInput {
+  addresses: [Int!]
+  email: String
+  phone: String
+  name: String
+  company: String
+  id: Int!
+}
+
+type UserEntity {
+  id: Float
+  email: String!
+  phone: String!
+  name: String
+  company: String
+  roles: [Role!]
+}
+
+type UserWithTokenEntity {
+  token: String!
+  user: UserEntity!
+}
+
